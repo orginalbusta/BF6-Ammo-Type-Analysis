@@ -200,7 +200,7 @@ def create_class_visualization(weapon_class, num_hs, suffix):
         return
     
     df_results = pd.DataFrame(results)
-    df_results.to_csv(f'{weapon_class}_{suffix}_Range_Analysis_100m.csv', index=False)
+    df_results.to_csv(f'analysis_results/{weapon_class}_{suffix}_Range_Analysis_100m.csv', index=False)
     
     # === CREATE VISUALIZATION ===
     num_weapons = len(df_results)
@@ -302,10 +302,10 @@ def create_class_visualization(weapon_class, num_hs, suffix):
                  fontsize=16, fontweight='bold', y=0.995)
     
     plt.tight_layout()
-    plt.savefig(f'visualizations/{weapon_class}_{suffix}_Range_Circles_100m.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'visualizations/BY_CLASS/{weapon_class}_{suffix}_Range_Circles_100m.png', dpi=300, bbox_inches='tight')
     print(f"\n{'='*80}")
-    print(f"Saved: visualizations/{weapon_class}_{suffix}_Range_Circles_100m.png")
-    print(f"Saved: {weapon_class}_{suffix}_Range_Analysis_100m.csv")
+    print(f"Saved: visualizations/BY_CLASS/{weapon_class}_{suffix}_Range_Circles_100m.png")
+    print(f"Saved: analysis_results/{weapon_class}_{suffix}_Range_Analysis_100m.csv")
     print("="*80)
 
 # Create all visualizations

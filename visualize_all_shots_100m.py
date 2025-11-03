@@ -174,7 +174,7 @@ def create_visualization(stk, num_hs, num_body, suffix, title_text):
               f"Synth: {synth_range:.1f}m (+{synth_range-base_range:.1f}m)")
     
     df_results = pd.DataFrame(results)
-    df_results.to_csv(f'{stk}Shot_{suffix}_Range_Analysis_100m.csv', index=False)
+    df_results.to_csv(f'analysis_results/{stk}Shot_{suffix}_Range_Analysis_100m.csv', index=False)
     
     # === CREATE VISUALIZATION ===
     num_weapons = len(df_results)
@@ -275,7 +275,7 @@ def create_visualization(stk, num_hs, num_body, suffix, title_text):
     plt.savefig(f'visualizations/BY_BTK/{stk}Shot_{suffix}_Range_Circles_100m.png', dpi=300, bbox_inches='tight')
     print(f"\n{'='*80}")
     print(f"Saved: visualizations/BY_BTK/{stk}Shot_{suffix}_Range_Circles_100m.png")
-    print(f"Saved: {stk}Shot_{suffix}_Range_Analysis_100m.csv")
+    print(f"Saved: analysis_results/{stk}Shot_{suffix}_Range_Analysis_100m.csv")
     print("="*80)
 
 # Create all visualizations

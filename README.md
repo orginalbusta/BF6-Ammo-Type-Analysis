@@ -214,6 +214,19 @@ These visualizations group weapons by how many shots they need to kill at 20m wi
 
 ---
 
+## Damage Falloff by Weapon Type
+
+![Damage Falloff Comparison](visualizations/BY_CLASS/Damage_Falloff_By_Type.png)
+
+This graph shows the actual damage falloff for all weapon types from 0m to 75m, with linear extrapolation to 100m. Key observations:
+- **M277 (Carbine)**: Zero falloff - maintains 25 damage at all ranges
+- **High-damage weapons** (33 DMG): Drop to ~22 damage at 100m
+- **SMGs**: Steepest falloff - some drop from 25 to ~12 damage at 100m
+- **Solid lines**: Actual measured data (0m, 10m, 75m)
+- **Dashed lines**: Extrapolated data (75m-100m)
+
+---
+
 ## Methodology
 
 ### Data Sources
@@ -240,7 +253,6 @@ These visualizations group weapons by how many shots they need to kill at 20m wi
 
 ### When to Use Hollow Point
 - ✅ **Always beneficial** - Every weapon gets range extension
-- ✅ **Minimal downside** - Usually the default special ammo choice
 - ✅ **Best for inconsistent aim** - Still helps even with 1 headshot
 
 ### When to Use Synthetic
@@ -270,27 +282,11 @@ These visualizations group weapons by how many shots they need to kill at 20m wi
 
 ### Data Files
 - `data/` - Raw weapon statistics and damage falloff data
-- Various CSV files with detailed range analysis results
+- `analysis_results/` - CSV files with detailed range analysis results for each weapon and scenario
 
 ### Scripts
 - `visualize_by_weapon_class.py` - Generates class-based visualizations
 - `visualize_all_shots_100m.py` - Generates BTK-based visualizations
 - `visualize_damage_falloff.py` - Generates damage falloff comparison charts
 - Other analysis and verification scripts
-
----
-
-## Contributing
-
-This analysis is based on Season 1 weapon data. If you have updated stats or find errors, please open an issue or submit a pull request!
-
----
-
-## License
-
-This is a community project for educational and informational purposes. Battlefield 6 and all related trademarks are property of their respective owners.
-
----
-
-**TL;DR**: Synthetic ammo is crazy good if you can land headshots. M277 is broken at range. UMG-40 is the SMG range king. Always use at least Hollow Point if you value range.
 
