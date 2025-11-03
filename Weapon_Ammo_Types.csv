@@ -1,0 +1,33 @@
+Gun,Type,Base DMG,Ammo Type,Actual Multiplier
+AK4D,AR,33,Hollow Point,1.5
+B36A4,AR,25,Synthetic,1.75
+KORD 6P67,AR,20,Hollow Point,1.5
+L85A3,AR,25,Synthetic,1.75
+M433,AR,25,Hollow Point,1.5
+NVO-228E,AR,33,Hollow Point,1.5
+SOR-556 MK2,AR,25,Synthetic,1.75
+TR7,AR,33,Hollow Point,1.5
+AK205,CARBINE,20,Synthetic,1.75
+GRT-BC,CARBINE,25,Hollow Point,1.5
+M277,CARBINE,25,Hollow Point,1.5
+M417 A2,CARBINE,33,Hollow Point,1.5
+M4A1,CARBINE,25,Hollow Point,1.5
+QBZ,CARBINE,25,Synthetic,1.75
+SG 553R,CARBINE,33,Hollow Point,1.5
+SOR-300SC,CARBINE,33,Synthetic,1.75
+DRS-IAR,LMG,25,Synthetic,1.75
+KTS100 MK8,LMG,25,Synthetic,1.75
+L110,LMG,25,Hollow Point,1.5
+M/60,LMG,33,Hollow Point,1.5
+M123K,LMG,25,Hollow Point,1.5
+M240L,LMG,33,Hollow Point,1.5
+M250,LMG,25,Hollow Point,1.5
+RPKM,LMG,33,Synthetic,1.75
+KV9,SMG,25,Hollow Point,1.5
+PM7A2,SMG,16,Synthetic,1.75
+PW5A3,SMG,25,Synthetic,1.75
+SCW-10,SMG,33,Hollow Point,1.5
+SGX,SMG,25,Hollow Point,1.5
+SL9,SMG,25,Synthetic,1.75
+UMG-40,SMG,25,Synthetic,1.75
+USG-90,SMG,20,Hollow Point,1.5
