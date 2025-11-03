@@ -212,6 +212,35 @@
             color: white;
         }
 
+        .range-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: #3a3f4f;
+            color: #e0e0e0;
+            border: 2px solid #6a7280;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            background: #4a5568;
+            border-color: #f59e42;
+        }
+
+        .tab-btn.active {
+            background: #f59e42;
+            border-color: #f59e42;
+            color: white;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
@@ -347,7 +376,14 @@
                 <!-- Range Analysis -->
                 <div class="visualization-section">
                     <h3 class="section-title">Effective Range Analysis</h3>
-                    <img id="rangeImage" class="viz-image" src="" alt="Range Analysis">
+                    <div class="range-tabs">
+                        <button class="tab-btn active" onclick="switchRangeTab(1)">1 Headshot</button>
+                        <button class="tab-btn" onclick="switchRangeTab(2)">2 Headshots</button>
+                        <button class="tab-btn" id="tab3hs" onclick="switchRangeTab(3)" style="display: none;">3 Headshots</button>
+                    </div>
+                    <img id="rangeImage1HS" class="viz-image range-image" src="" alt="Range Analysis 1HS">
+                    <img id="rangeImage2HS" class="viz-image range-image" src="" alt="Range Analysis 2HS" style="display: none;">
+                    <img id="rangeImage3HS" class="viz-image range-image" src="" alt="Range Analysis 3HS" style="display: none;">
                 </div>
 
                 <!-- Recommendations -->
@@ -361,6 +397,8 @@
 
     <script src="weapon-data.js"></script>
     <script>
+        let currentWeaponData = null;
+
         function showWeapon(weaponName, weaponClass) {
             // Hide weapon selection, show weapon detail
             document.getElementById('weaponSelection').style.display = 'none';
@@ -372,20 +410,48 @@
             document.getElementById('weaponClass').textContent = weaponClass;
 
             // Get weapon data
-            const weapon = weaponData[weaponName];
+            currentWeaponData = weaponData[weaponName];
             
-            // Set images
-            document.getElementById('ttkImage').src = weapon.ttkImage;
-            document.getElementById('rangeImage').src = weapon.rangeImage;
+            // Set TTK image
+            document.getElementById('ttkImage').src = currentWeaponData.ttkImage;
+            
+            // Set range images
+            document.getElementById('rangeImage1HS').src = currentWeaponData.rangeImage1HS;
+            document.getElementById('rangeImage2HS').src = currentWeaponData.rangeImage2HS;
+            
+            // Show/hide 3HS tab and image based on weapon data
+            const tab3hs = document.getElementById('tab3hs');
+            const img3hs = document.getElementById('rangeImage3HS');
+            if (currentWeaponData.rangeImage3HS) {
+                tab3hs.style.display = 'block';
+                img3hs.src = currentWeaponData.rangeImage3HS;
+            } else {
+                tab3hs.style.display = 'none';
+            }
+
+            // Reset to 1HS tab
+            switchRangeTab(1);
 
             // Set recommendations
             const recDiv = document.getElementById('recommendations');
-            recDiv.innerHTML = weapon.recommendations.map(rec => 
+            recDiv.innerHTML = currentWeaponData.recommendations.map(rec => 
                 `<div class="rec-item">${rec}</div>`
             ).join('');
 
             // Scroll to top
             window.scrollTo(0, 0);
+        }
+
+        function switchRangeTab(hsCount) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Hide all range images
+            document.querySelectorAll('.range-image').forEach(img => img.style.display = 'none');
+
+            // Show selected range image
+            document.getElementById(`rangeImage${hsCount}HS`).style.display = 'block';
         }
 
         function showWeaponSelection() {
