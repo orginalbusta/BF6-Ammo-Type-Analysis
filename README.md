@@ -25,86 +25,59 @@ The analysis uses actual weapon damage data at 0m, 10m, 75m, and extrapolates to
 
 ---
 
-## Visualizations by Weapon Class
+## TTK (Time-To-Kill) Analysis
 
-These visualizations group weapons by class (AR, Carbine, LMG, SMG) and show how different headshot scenarios affect effective range.
+Comprehensive weapon-by-weapon analysis showing how Hollow Point and Synthetic ammo affect TTK across different ranges and headshot combinations.
 
-### Assault Rifles
+### Understanding the Analysis
+Each weapon has a detailed TTK heatmap showing:
+- **Top Row**: Actual TTK values (in milliseconds) for Base, HP, and Synthetic ammo
+- **Bottom Row**: TTK improvements (how much faster HP/Synth kills vs Base)
+- **Y-axis**: Number of headshots (0 at bottom = body shots only, increasing upward)
+- **X-axis**: Range in meters
+- **Color scale**: Shared across all plots for direct comparison
 
-#### 1 Incidental Headshot
-![AR 1 Headshot](visualizations/BY_CLASS/AR_1HS_Range_Circles_100m.png)
+All TTK analyses are organized by weapon class:
+- [Assault Rifles](visualizations/TTK_ANALYSIS/Assault%20Rifle/)
+- [Carbines](visualizations/TTK_ANALYSIS/Carbine/)
+- [Light Machine Guns](visualizations/TTK_ANALYSIS/LMG/)
+- [Submachine Guns](visualizations/TTK_ANALYSIS/SMG/)
 
-**Key Insights:**
-- 3-shot kill weapons (TR-7, AK4D): 35m base → 62m synthetic (+76%)
-- 4-shot kill weapons: 35-36m base → 61-62m synthetic (+73%)
+### Ammo Type Tierlists
 
-#### 2 Headshots
-![AR 2 Headshots](visualizations/BY_CLASS/AR_2HS_Range_Circles_100m.png)
+#### Top Hollow Point Users
+Based on average TTK improvement across all ranges and headshot combinations:
 
-**Key Insights:**
-- All ARs reach 75m+ with HP ammo
-- Synthetic extends to 97-99m - nearly double the base range!
-- 3-shot kills slightly outperform 4-shot kills at extreme ranges
+| Rank | Weapon | Class | Avg Improvement | Max Improvement |
+|------|--------|-------|-----------------|-----------------|
+| 1 | AK4D | Assault Rifle | 116.7ms | 116.7ms |
+| 2 | RPKM | LMG | 108.5ms | 108.5ms |
+| 3 | SOR-556 MK2 | Assault Rifle | 105.6ms | 105.6ms |
+| 4 | UMG-40 | SMG | 94.5ms | 94.5ms |
+| 5 | M277 | Carbine | 83.3ms | 83.3ms |
+| 6 | L110 | LMG | 83.3ms | 83.3ms |
+| 7 | B36A4 | Assault Rifle | 83.3ms | 83.3ms |
+| 8 | DRS-IAR | LMG | 77.8ms | 77.8ms |
+| 9 | PW5A3 | SMG | 77.8ms | 77.8ms |
+| 10 | GRT-BC | Carbine | 72.3ms | 72.3ms |
 
----
+#### Top Synthetic Users
+Based on average TTK improvement (only weapons with Synthetic access):
 
-### Carbines
-
-#### 1 Incidental Headshot
-![Carbine 1 Headshot](visualizations/BY_CLASS/Carbine_1HS_Range_Circles_100m.png)
-
-**Key Insights:**
-- **M277 dominates**: 100m at all ammo types (zero falloff!)
-- 5-shot carbines: 47m base → 69m synthetic (+47%)
-- M417A2: 47m base → 65m synthetic (+39%)
-
-#### 2 Headshots
-![Carbine 2 Headshots](visualizations/BY_CLASS/Carbine_2HS_Range_Circles_100m.png)
-
-**Key Insights:**
-- **M4A1, GRT-BC, QBZ-192**: Reach 100m with Synthetic (+53%)
-- M277 maintains 100m dominance
-- Best overall range performance of any weapon class
-
----
-
-### Light Machine Guns (LMGs)
-
-#### 1 Incidental Headshot
-![LMG 1 Headshot](visualizations/BY_CLASS/LMG_1HS_Range_Circles_100m.png)
-
-**Key Insights:**
-- Similar performance to ARs in this scenario
-- M60 matches high-damage AR performance (35m → 62m)
-- RPKM slightly better: 47m base → 65m synthetic
-
-#### 2 Headshots
-![LMG 2 Headshots](visualizations/BY_CLASS/LMG_2HS_Range_Circles_100m.png)
+| Rank | Weapon | Class | Avg Improvement | Max Improvement |
+|------|--------|-------|-----------------|-----------------|
+| 1 | RPKM | LMG | 108.5ms | 108.5ms |
+| 2 | UMG-40 | SMG | 106.8ms | 189.0ms |
+| 3 | SOR-556 MK2 | Assault Rifle | 105.6ms | 105.6ms |
+| 4 | PW5A3 | SMG | 96.5ms | 155.6ms |
+| 5 | B36A4 | Assault Rifle | 83.3ms | 83.3ms |
+| 6 | DRS-IAR | LMG | 77.8ms | 77.8ms |
 
 **Key Insights:**
-- Excellent long-range performance with 2 headshots
-- Most LMGs reach 75m with HP, 90-99m with Synthetic
-- Consistent +31-47% range improvement with HP
-
----
-
-### Submachine Guns (SMGs)
-
-#### 1 Incidental Headshot
-![SMG 1 Headshot](visualizations/BY_CLASS/SMG_1HS_Range_Circles_100m.png)
-
-**Key Insights:**
-- **Clear performance gap**: KV9/SGX limited to 24-38m
-- **UMG-40 exceptional**: 47m base → 69m synthetic (matches carbines!)
-- Most SMGs suffer from steep damage falloff
-
-#### 2 Headshots
-![SMG 2 Headshots](visualizations/BY_CLASS/SMG_2HS_Range_Circles_100m.png)
-
-**Key Insights:**
-- **UMG-40 reaches 100m** with Synthetic - exceptional for an SMG
-- USG-90 solid mid-range: 59m base → 86m synthetic (+45%)
-- Low-damage SMGs still limited to 60m even with Synthetic
+- **RPKM** dominates both HP and Synthetic tierlists - best overall user of special ammo
+- **UMG-40** shows exceptional Synthetic scaling with max improvements of 189ms
+- **Slower-firing weapons** (AK4D, RPKM) benefit more from TTK reductions
+- **Synthetic ammo** provides larger peak improvements but HP is more consistent
 
 ---
 
@@ -216,7 +189,7 @@ These visualizations group weapons by how many shots they need to kill at 20m wi
 
 ## Damage Falloff by Weapon Type
 
-![Damage Falloff Comparison](visualizations/BY_CLASS/Damage_Falloff_By_Type.png)
+![Damage Falloff Comparison](visualizations/Damage_Falloff_By_Type.png)
 
 This graph shows the actual damage falloff for all weapon types from 0m to 75m, with linear extrapolation to 100m. Key observations:
 - **M277 (Carbine)**: Zero falloff - maintains 25 damage at all ranges
@@ -257,16 +230,18 @@ This graph shows the actual damage falloff for all weapon types from 0m to 75m, 
 ## Files in This Repository
 
 ### Visualizations
-- `visualizations/BY_CLASS/` - Organized by weapon class (AR, Carbine, LMG, SMG)
-- `visualizations/BY_BTK/` - Organized by bullets-to-kill (3-shot, 4-shot, 5-shot)
+- `visualizations/TTK_ANALYSIS/` - Weapon-by-weapon TTK analysis organized by class
+- `visualizations/BY_BTK/` - Range circle visualizations organized by bullets-to-kill (3-shot, 4-shot, 5-shot)
+- `visualizations/Damage_Falloff_By_Type.png` - Damage falloff comparison across all weapons
 
 ### Data Files
 - `data/` - Raw weapon statistics and damage falloff data
-- `analysis_results/` - CSV files with detailed range analysis results for each weapon and scenario
+- `analysis_results/` - CSV files with detailed analysis results including tierlists
 
 ### Scripts
-- `visualize_by_weapon_class.py` - Generates class-based visualizations
-- `visualize_all_shots_100m.py` - Generates BTK-based visualizations
+- `analyze_ttk_all_weapons.py` - Generates weapon-by-weapon TTK analysis heatmaps
+- `create_ttk_tierlist.py` - Analyzes and ranks weapons by HP/Synthetic effectiveness
+- `visualize_all_shots_100m.py` - Generates BTK-based range circle visualizations
 - `visualize_damage_falloff.py` - Generates damage falloff comparison charts
 - Other analysis and verification scripts
 
