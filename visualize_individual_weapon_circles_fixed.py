@@ -7,6 +7,7 @@ import os
 # Read data
 falloff_df = pd.read_csv('data/Battlefield 6 Damage Fall Off - V2.csv', skiprows=1)
 ammo_df = pd.read_csv('analysis_results/Weapon_Ammo_Types.csv')
+stk_df = pd.read_csv('analysis_results/STK_Categorization_One_Headshot.csv')
 
 # Clean up falloff data
 falloff_df = falloff_df.rename(columns={
@@ -29,8 +30,28 @@ falloff_df['Gun'] = falloff_df['Gun'].replace(name_mapping)
 
 # Merge dataframes
 df = falloff_df[['Gun', 'Type', 'DMG_Close', 'DMG_10M', 'DMG_75M', 'ROF']].copy()
+
+# Convert to numeric and add extrapolated 100m damage
+df['DMG_Close'] = pd.to_numeric(df['DMG_Close'], errors='coerce')
+df['DMG_10M'] = pd.to_numeric(df['DMG_10M'], errors='coerce')
+df['DMG_75M'] = pd.to_numeric(df['DMG_75M'], errors='coerce')
+
+def extrapolate_damage_100m(dmg_10m, dmg_75m):
+    """Linearly extrapolate damage to 100m"""
+    damage_loss_per_meter = (dmg_10m - dmg_75m) / (75 - 10)
+    range_beyond_75 = 100 - 75
+    extrapolated_dmg = dmg_75m - (damage_loss_per_meter * range_beyond_75)
+    return max(extrapolated_dmg, 10)
+
+df['DMG_100M'] = df.apply(lambda row: extrapolate_damage_100m(row['DMG_10M'], row['DMG_75M']), axis=1)
+
 df = df.merge(ammo_df[['Gun', 'Ammo Type']], on='Gun', how='left')
-df = df.dropna(subset=['DMG_Close', 'DMG_10M', 'DMG_75M', 'ROF', 'Ammo Type', 'Type'])
+
+# Merge with STK data
+stk_temp = stk_df[['Gun', 'STK at 20M']].copy()
+df = df.merge(stk_temp, on='Gun', how='left')
+
+df = df.dropna(subset=['DMG_Close', 'DMG_10M', 'DMG_75M', 'ROF', 'Ammo Type', 'Type', 'STK at 20M'])
 
 # Constants
 BASE_HS_MULT = 1.34
@@ -38,42 +59,65 @@ HP_MULT = 1.5
 SYNTH_MULT = 1.75
 TARGET_HP = 100
 
-def interpolate_max_range_100m(row, hs_multiplier, num_hs, num_body):
-    """Calculate max range using interpolation and extrapolation to 100m"""
+def interpolate_max_range_100m(row, multiplier, num_hs, num_body):
+    """Interpolate to find exact range where N HS + M Body = 100 damage - EXACT COPY from working code"""
+    
     dmg_close = row['DMG_Close']
     dmg_10m = row['DMG_10M']
     dmg_75m = row['DMG_75M']
+    dmg_100m = row['DMG_100M']
     
-    # Extrapolate to 100m
-    damage_loss_per_meter = (dmg_10m - dmg_75m) / (75 - 10)
-    range_beyond_75 = 100 - 75
-    dmg_100m = dmg_75m - (damage_loss_per_meter * range_beyond_75)
-    dmg_100m = max(dmg_100m, 10)
+    if pd.isna(dmg_close) or pd.isna(dmg_10m) or pd.isna(dmg_75m) or pd.isna(dmg_100m):
+        return 0
     
-    # Test each range
-    for test_range in np.arange(0, 100.5, 0.5):
-        if test_range <= 10:
-            damage = np.interp(test_range, [0, 10], [dmg_close, dmg_10m])
-        elif test_range <= 75:
-            damage = np.interp(test_range, [10, 75], [dmg_10m, dmg_75m])
+    def calc_damage(hs_dmg, body_dmg):
+        return (hs_dmg * num_hs) + (body_dmg * num_body)
+    
+    ranges = [
+        (0, 10, dmg_close, dmg_10m),
+        (10, 75, dmg_10m, dmg_75m),
+        (75, 100, dmg_75m, dmg_100m)
+    ]
+    
+    max_range = 0
+    
+    for start_range, end_range, start_dmg, end_dmg in ranges:
+        hs_dmg_end = end_dmg * multiplier
+        total_dmg_end = calc_damage(hs_dmg_end, end_dmg)
+        
+        if total_dmg_end >= TARGET_HP:
+            max_range = end_range
         else:
-            damage = np.interp(test_range, [75, 100], [dmg_75m, dmg_100m])
-        
-        total_damage = (damage * hs_multiplier * num_hs) + (damage * num_body)
-        
-        if total_damage < TARGET_HP:
-            return max(0, test_range - 0.5)
+            hs_dmg_start = start_dmg * multiplier
+            total_dmg_start = calc_damage(hs_dmg_start, start_dmg)
+            
+            if total_dmg_start >= TARGET_HP:
+                # Target is somewhere in this range, interpolate
+                for test_range in np.arange(start_range, end_range + 0.1, 0.1):
+                    ratio = (test_range - start_range) / (end_range - start_range)
+                    interpolated_dmg = start_dmg + (end_dmg - start_dmg) * ratio
+                    hs_dmg = interpolated_dmg * multiplier
+                    total_dmg = calc_damage(hs_dmg, interpolated_dmg)
+                    
+                    if total_dmg < TARGET_HP:
+                        max_range = max(0, test_range - 0.1)
+                        break
+                else:
+                    max_range = end_range
+                break
     
-    return 100
+    return max_range
 
 def create_circle_plot(gun_name, weapon_class, row, ammo_type, num_hs, output_path):
     """Create a single circle plot for a weapon"""
     
-    # Determine number of body shots (estimate based on damage)
-    base_dmg = row['DMG_Close']
-    # Rough estimate of shots needed
-    shots_needed = int(np.ceil(TARGET_HP / (base_dmg * BASE_HS_MULT)))
-    num_body = max(0, shots_needed - num_hs)
+    # Get actual STK from data
+    stk = int(row['STK at 20M'])
+    num_body = stk - num_hs
+    
+    if num_body < 0:
+        # Not enough shots for this many headshots
+        return False
     
     # Calculate ranges
     base_range = interpolate_max_range_100m(row, BASE_HS_MULT, num_hs, num_body)
@@ -143,6 +187,8 @@ def create_circle_plot(gun_name, weapon_class, row, ammo_type, num_hs, output_pa
     plt.tight_layout()
     plt.savefig(output_path, dpi=150, bbox_inches='tight', facecolor='white')
     plt.close()
+    
+    return True
 
 # Create output directory
 os.makedirs('visualizations/INDIVIDUAL_WEAPONS', exist_ok=True)
@@ -161,19 +207,22 @@ for idx, weapon_row in df.iterrows():
     print(f"Processing: {gun_name} (Base DMG: {base_dmg})")
     
     # Always create 1HS and 2HS versions
-    create_circle_plot(gun_name, weapon_class, weapon_row, ammo_type, 1, 
+    result = create_circle_plot(gun_name, weapon_class, weapon_row, ammo_type, 1, 
                       f'visualizations/INDIVIDUAL_WEAPONS/{gun_name}_1HS.png')
-    print(f"  Saved: {gun_name}_1HS.png")
+    if result is not False:
+        print(f"  Saved: {gun_name}_1HS.png")
     
-    create_circle_plot(gun_name, weapon_class, weapon_row, ammo_type, 2, 
+    result = create_circle_plot(gun_name, weapon_class, weapon_row, ammo_type, 2, 
                       f'visualizations/INDIVIDUAL_WEAPONS/{gun_name}_2HS.png')
-    print(f"  Saved: {gun_name}_2HS.png")
+    if result is not False:
+        print(f"  Saved: {gun_name}_2HS.png")
     
     # Create 3HS version for weapons with < 25 damage
     if base_dmg < 25:
-        create_circle_plot(gun_name, weapon_class, weapon_row, ammo_type, 3, 
+        result = create_circle_plot(gun_name, weapon_class, weapon_row, ammo_type, 3, 
                           f'visualizations/INDIVIDUAL_WEAPONS/{gun_name}_3HS.png')
-        print(f"  Saved: {gun_name}_3HS.png")
+        if result is not False:
+            print(f"  Saved: {gun_name}_3HS.png")
 
 print(f"\n{'='*80}")
 print(f"COMPLETED: All individual weapon range circles saved")
