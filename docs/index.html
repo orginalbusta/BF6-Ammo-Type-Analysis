@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BF6 Ammo Type Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 2px solid #0f3460;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #e94560;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #aaa;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: none;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #d63651;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(233, 69, 96, 0.3);
+        }
+
+        .weapon-selection {
+            display: block;
+        }
+
+        .weapon-detail {
+            display: none;
+        }
+
+        .class-section {
+            margin-bottom: 50px;
+        }
+
+        .class-header {
+            font-size: 2em;
+            color: #e94560;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0f3460;
+        }
+
+        .weapon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .weapon-btn {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            color: #eee;
+            border: 2px solid #e94560;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .weapon-btn:hover {
+            background: linear-gradient(135deg, #e94560 0%, #d63651 100%);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(233, 69, 96, 0.4);
+        }
+
+        .weapon-content {
+            padding: 20px;
+        }
+
+        .weapon-title {
+            font-size: 2.5em;
+            color: #e94560;
+            margin-bottom: 10px;
+        }
+
+        .weapon-class {
+            font-size: 1.2em;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .visualization-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #e94560;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0f3460;
+        }
+
+        .viz-image {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+            border: 2px solid #e94560;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .rec-title {
+            font-size: 1.8em;
+            color: #e94560;
+            margin-bottom: 20px;
+        }
+
+        .rec-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(233, 69, 96, 0.1);
+            border-left: 4px solid #e94560;
+            border-radius: 4px;
+        }
+
+        .rec-item strong {
+            color: #e94560;
+        }
+
+        .ammo-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        .badge-synthetic {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .badge-hp {
+            background: #e67e22;
+            color: white;
+        }
+
+        .badge-base {
+            background: #95a5a6;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .weapon-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .weapon-btn {
+                padding: 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="showWeaponSelection()">← Back to Weapon Selection</button>
+
+    <div class="container">
+        <header>
+            <h1>BF6 Ammo Type Analysis</h1>
+            <p class="subtitle">Comprehensive TTK and Range Analysis for Special Ammunition</p>
+        </header>
+
+        <!-- Weapon Selection View -->
+        <div id="weaponSelection" class="weapon-selection">
+            <!-- Assault Rifles -->
+            <div class="class-section">
+                <h2 class="class-header">Assault Rifles</h2>
+                <div class="weapon-grid">
+                    <button class="weapon-btn" onclick="showWeapon('AK4D', 'Assault Rifle')">AK4D</button>
+                    <button class="weapon-btn" onclick="showWeapon('B36A4', 'Assault Rifle')">B36A4</button>
+                    <button class="weapon-btn" onclick="showWeapon('M433', 'Assault Rifle')">M433</button>
+                    <button class="weapon-btn" onclick="showWeapon('SOR-556 MK2', 'Assault Rifle')">SOR-556 MK2</button>
+                </div>
+            </div>
+
+            <!-- Carbines -->
+            <div class="class-section">
+                <h2 class="class-header">Carbines</h2>
+                <div class="weapon-grid">
+                    <button class="weapon-btn" onclick="showWeapon('GRT-BC', 'Carbine')">GRT-BC</button>
+                    <button class="weapon-btn" onclick="showWeapon('M277', 'Carbine')">M277</button>
+                    <button class="weapon-btn" onclick="showWeapon('M4A1', 'Carbine')">M4A1</button>
+                </div>
+            </div>
+
+            <!-- Light Machine Guns -->
+            <div class="class-section">
+                <h2 class="class-header">Light Machine Guns</h2>
+                <div class="weapon-grid">
+                    <button class="weapon-btn" onclick="showWeapon('DRS-IAR', 'LMG')">DRS-IAR</button>
+                    <button class="weapon-btn" onclick="showWeapon('L110', 'LMG')">L110</button>
+                    <button class="weapon-btn" onclick="showWeapon('M123K', 'LMG')">M123K</button>
+                    <button class="weapon-btn" onclick="showWeapon('RPKM', 'LMG')">RPKM</button>
+                </div>
+            </div>
+
+            <!-- Submachine Guns -->
+            <div class="class-section">
+                <h2 class="class-header">Submachine Guns</h2>
+                <div class="weapon-grid">
+                    <button class="weapon-btn" onclick="showWeapon('KV9', 'SMG')">KV9</button>
+                    <button class="weapon-btn" onclick="showWeapon('PW5A3', 'SMG')">PW5A3</button>
+                    <button class="weapon-btn" onclick="showWeapon('SGX', 'SMG')">SGX</button>
+                    <button class="weapon-btn" onclick="showWeapon('UMG-40', 'SMG')">UMG-40</button>
+                    <button class="weapon-btn" onclick="showWeapon('USG-90', 'SMG')">USG-90</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weapon Detail View -->
+        <div id="weaponDetail" class="weapon-detail">
+            <div class="weapon-content">
+                <h2 class="weapon-title" id="weaponName"></h2>
+                <p class="weapon-class" id="weaponClass"></p>
+
+                <!-- TTK Analysis -->
+                <div class="visualization-section">
+                    <h3 class="section-title">TTK (Time-To-Kill) Analysis</h3>
+                    <img id="ttkImage" class="viz-image" src="" alt="TTK Analysis">
+                </div>
+
+                <!-- Range Analysis -->
+                <div class="visualization-section">
+                    <h3 class="section-title">Effective Range Analysis</h3>
+                    <img id="rangeImage" class="viz-image" src="" alt="Range Analysis">
+                </div>
+
+                <!-- Recommendations -->
+                <div class="recommendations">
+                    <h3 class="rec-title">Ammo Recommendations</h3>
+                    <div id="recommendations"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="weapon-data.js"></script>
+    <script>
+        function showWeapon(weaponName, weaponClass) {
+            // Hide weapon selection, show weapon detail
+            document.getElementById('weaponSelection').style.display = 'none';
+            document.getElementById('weaponDetail').style.display = 'block';
+            document.querySelector('.back-btn').style.display = 'block';
+
+            // Set weapon info
+            document.getElementById('weaponName').textContent = weaponName;
+            document.getElementById('weaponClass').textContent = weaponClass;
+
+            // Get weapon data
+            const weapon = weaponData[weaponName];
+            
+            // Set images
+            document.getElementById('ttkImage').src = weapon.ttkImage;
+            document.getElementById('rangeImage').src = weapon.rangeImage;
+
+            // Set recommendations
+            const recDiv = document.getElementById('recommendations');
+            recDiv.innerHTML = weapon.recommendations.map(rec => 
+                `<div class="rec-item">${rec}</div>`
+            ).join('');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function showWeaponSelection() {
+            document.getElementById('weaponSelection').style.display = 'block';
+            document.getElementById('weaponDetail').style.display = 'none';
+            document.querySelector('.back-btn').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
+
