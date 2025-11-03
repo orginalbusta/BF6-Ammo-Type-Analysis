@@ -28,7 +28,7 @@ name_mapping = {
 }
 falloff_df['Gun'] = falloff_df['Gun'].replace(name_mapping)
 
-# Merge dataframes - Use 'Type' from falloff_df which is already there
+# Merge dataframes
 df = falloff_df[['Gun', 'Type', 'DMG_Close', 'DMG_10M', 'DMG_75M', 'ROF']].copy()
 df = df.merge(ammo_df[['Gun', 'Ammo Type']], on='Gun', how='left')
 
@@ -50,15 +50,14 @@ def extrapolate_damage(dmg_close, dmg_10m, dmg_75m, target_range):
         dmg_100m = max(dmg_100m, 10)  # Floor at 10 damage
         return np.interp(target_range, [75, 100], [dmg_75m, dmg_100m])
 
-# Constants - MODIFIED FOR 80HP
+# Constants
 BASE_HS_MULT = 1.34
 HP_MULT = 1.5
 SYNTH_MULT = 1.75
-TARGET_HP = 80  # <-- CHANGED FROM 100
 RANGES = [0, 10, 20, 30, 40, 50, 60, 75, 100]
 MAX_HS = 5
 
-def calculate_stk_ttk(base_dmg, rof, hs_mult, num_hs):
+def calculate_stk_ttk(base_dmg, rof, hs_mult, num_hs, target_hp):
     """Calculate STK and TTK for given parameters"""
     if base_dmg <= 0 or rof <= 0:
         return np.inf, np.inf
@@ -72,7 +71,7 @@ def calculate_stk_ttk(base_dmg, rof, hs_mult, num_hs):
         total_shots = num_hs + body_shots
         total_damage = (base_dmg * hs_mult * num_hs) + (base_dmg * body_shots)
         
-        if total_damage >= TARGET_HP:
+        if total_damage >= target_hp:
             stk = total_shots
             ttk = (stk - 1) * (60 / rof) * 1000  # in ms
             if stk < best_stk:
@@ -84,13 +83,12 @@ def calculate_stk_ttk(base_dmg, rof, hs_mult, num_hs):
 
 # Create output directories
 os.makedirs('visualizations/TTK_ANALYSIS_80HP', exist_ok=True)
-# Get all unique weapon classes and create folders
 unique_classes = df['Type'].unique()
 for weapon_class in unique_classes:
     os.makedirs(f'visualizations/TTK_ANALYSIS_80HP/{weapon_class}', exist_ok=True)
 
 print(f"\n{'='*80}")
-print(f"GENERATING TTK ANALYSIS FOR ALL WEAPONS (80 HP TARGET)")
+print(f"GENERATING TTK ANALYSIS FOR ALL WEAPONS (80 HP with 100 HP color scale)")
 print(f"{'='*80}\n")
 
 # Process each weapon
@@ -105,15 +103,43 @@ for idx, weapon_row in df.iterrows():
     
     print(f"Processing: {gun_name} ({weapon_class})")
     
-    # Calculate TTK for all ranges and headshot combinations
-    results = []
+    # Calculate TTK for BOTH 100HP and 80HP to find shared color scale
+    all_ttk_values = []
+    
+    for target_hp in [100, 80]:
+        for r in RANGES:
+            current_dmg = extrapolate_damage(dmg_close, dmg_10m, dmg_75m, r)
+            
+            for num_hs in range(MAX_HS + 1):
+                # Base ammo
+                _, base_ttk = calculate_stk_ttk(current_dmg, rof, BASE_HS_MULT, num_hs, target_hp)
+                if base_ttk != np.inf:
+                    all_ttk_values.append(base_ttk)
+                
+                # HP ammo
+                _, hp_ttk = calculate_stk_ttk(current_dmg, rof, HP_MULT, num_hs, target_hp)
+                if hp_ttk != np.inf:
+                    all_ttk_values.append(hp_ttk)
+                
+                # Synthetic ammo (if available)
+                if ammo_type == 'Synthetic':
+                    _, synth_ttk = calculate_stk_ttk(current_dmg, rof, SYNTH_MULT, num_hs, target_hp)
+                    if synth_ttk != np.inf:
+                        all_ttk_values.append(synth_ttk)
+    
+    # Calculate shared color scale
+    global_ttk_min = min(all_ttk_values)
+    global_ttk_max = max(all_ttk_values)
+    
+    # Now calculate 80HP results for plotting
+    results_80hp = []
     for r in RANGES:
         current_dmg = extrapolate_damage(dmg_close, dmg_10m, dmg_75m, r)
         
         for num_hs in range(MAX_HS + 1):
             # Base ammo
-            base_stk, base_ttk = calculate_stk_ttk(current_dmg, rof, BASE_HS_MULT, num_hs)
-            results.append({
+            base_stk, base_ttk = calculate_stk_ttk(current_dmg, rof, BASE_HS_MULT, num_hs, 80)
+            results_80hp.append({
                 'Range': r,
                 'Headshots': num_hs,
                 'Ammo': 'Base',
@@ -122,8 +148,8 @@ for idx, weapon_row in df.iterrows():
             })
             
             # HP ammo
-            hp_stk, hp_ttk = calculate_stk_ttk(current_dmg, rof, HP_MULT, num_hs)
-            results.append({
+            hp_stk, hp_ttk = calculate_stk_ttk(current_dmg, rof, HP_MULT, num_hs, 80)
+            results_80hp.append({
                 'Range': r,
                 'Headshots': num_hs,
                 'Ammo': 'HP',
@@ -133,8 +159,8 @@ for idx, weapon_row in df.iterrows():
             
             # Synthetic ammo (if available)
             if ammo_type == 'Synthetic':
-                synth_stk, synth_ttk = calculate_stk_ttk(current_dmg, rof, SYNTH_MULT, num_hs)
-                results.append({
+                synth_stk, synth_ttk = calculate_stk_ttk(current_dmg, rof, SYNTH_MULT, num_hs, 80)
+                results_80hp.append({
                     'Range': r,
                     'Headshots': num_hs,
                     'Ammo': 'Synth',
@@ -142,9 +168,9 @@ for idx, weapon_row in df.iterrows():
                     'TTK_ms': synth_ttk
                 })
     
-    df_results = pd.DataFrame(results)
+    df_results = pd.DataFrame(results_80hp)
     
-    # Create visualizations
+    # Create visualizations with SHARED color scale
     if ammo_type == 'Synthetic':
         # 2x3 grid for weapons with Synthetic access
         fig, axes = plt.subplots(2, 3, figsize=(24, 16))
@@ -157,9 +183,9 @@ for idx, weapon_row in df.iterrows():
         pivot_synth = df_results[df_results['Ammo'] == 'Synth'].pivot(index='Headshots', columns='Range', values='TTK_ms')
         pivot_synth = pivot_synth.iloc[::-1]
         
-        # Find shared color scale range for TTK plots
-        ttk_min = min(pivot_base.min().min(), pivot_hp.min().min(), pivot_synth.min().min())
-        ttk_max = max(pivot_base.max().max(), pivot_hp.max().max(), pivot_synth.max().max())
+        # USE GLOBAL COLOR SCALE (same as 100HP version)
+        ttk_min = global_ttk_min
+        ttk_max = global_ttk_max
         
         # Top Row: TTK Heatmaps
         # 1. Base ammo
@@ -231,9 +257,9 @@ for idx, weapon_row in df.iterrows():
         pivot_hp = df_results[df_results['Ammo'] == 'HP'].pivot(index='Headshots', columns='Range', values='TTK_ms')
         pivot_hp = pivot_hp.iloc[::-1]
         
-        # Find shared color scale range for TTK plots
-        ttk_min = min(pivot_base.min().min(), pivot_hp.min().min())
-        ttk_max = max(pivot_base.max().max(), pivot_hp.max().max())
+        # USE GLOBAL COLOR SCALE (same as 100HP version)
+        ttk_min = global_ttk_min
+        ttk_max = global_ttk_max
         
         # Top Row: TTK Heatmaps
         # 1. Base ammo
@@ -275,9 +301,9 @@ for idx, weapon_row in df.iterrows():
     plt.savefig(output_path, dpi=150, bbox_inches='tight', facecolor='white')
     plt.close()
     
-    print(f"  Saved: {output_path}")
+    print(f"  Saved: {output_path} (color scale: {ttk_min:.0f}-{ttk_max:.0f}ms)")
 
 print(f"\n{'='*80}")
-print(f"COMPLETED: All TTK analyses for 80 HP targets saved to visualizations/TTK_ANALYSIS_80HP/")
+print(f"COMPLETED: All 80HP TTK analyses with shared 100HP color scale")
 print(f"{'='*80}\n")
 
