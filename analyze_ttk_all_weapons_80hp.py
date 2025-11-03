@@ -127,9 +127,51 @@ for idx, weapon_row in df.iterrows():
                     if synth_ttk != np.inf:
                         all_ttk_values.append(synth_ttk)
     
-    # Calculate shared color scale
+    # Calculate shared color scale for TTK
     global_ttk_min = min(all_ttk_values)
     global_ttk_max = max(all_ttk_values)
+    
+    # Calculate improvements for BOTH 100HP and 80HP to find shared improvement scale
+    all_improvements = []
+    
+    for target_hp in [100, 80]:
+        # Store TTK values for this HP level
+        base_ttks = {}
+        hp_ttks = {}
+        synth_ttks = {}
+        
+        for r in RANGES:
+            current_dmg = extrapolate_damage(dmg_close, dmg_10m, dmg_75m, r)
+            
+            for num_hs in range(MAX_HS + 1):
+                _, base_ttk = calculate_stk_ttk(current_dmg, rof, BASE_HS_MULT, num_hs, target_hp)
+                _, hp_ttk = calculate_stk_ttk(current_dmg, rof, HP_MULT, num_hs, target_hp)
+                
+                base_ttks[(r, num_hs)] = base_ttk
+                hp_ttks[(r, num_hs)] = hp_ttk
+                
+                # Calculate HP improvement
+                if base_ttk != np.inf and hp_ttk != np.inf:
+                    improvement = base_ttk - hp_ttk
+                    all_improvements.append(improvement)
+                
+                # Synthetic if available
+                if ammo_type == 'Synthetic':
+                    _, synth_ttk = calculate_stk_ttk(current_dmg, rof, SYNTH_MULT, num_hs, target_hp)
+                    synth_ttks[(r, num_hs)] = synth_ttk
+                    
+                    if base_ttk != np.inf and synth_ttk != np.inf:
+                        improvement = base_ttk - synth_ttk
+                        all_improvements.append(improvement)
+    
+    # Calculate shared improvement scale (symmetric around 0 for proper centering)
+    if all_improvements:
+        max_abs_improvement = max(abs(min(all_improvements)), abs(max(all_improvements)))
+        global_imp_min = -max_abs_improvement
+        global_imp_max = max_abs_improvement
+    else:
+        global_imp_min = -100
+        global_imp_max = 100
     
     # Now calculate 80HP results for plotting
     results_80hp = []
@@ -225,14 +267,12 @@ for idx, weapon_row in df.iterrows():
         ttk_improvement_synth = pivot_base.iloc[::-1] - pivot_synth.iloc[::-1]
         ttk_improvement_synth = ttk_improvement_synth.iloc[::-1]
         
-        # Find shared color scale for improvement plots
-        imp_min = min(ttk_improvement_hp.min().min(), ttk_improvement_synth.min().min())
-        imp_max = max(ttk_improvement_hp.max().max(), ttk_improvement_synth.max().max())
+        # USE GLOBAL IMPROVEMENT SCALE (shared with 100HP, symmetric around 0)
         
         # 5. HP improvement
         ax5 = axes[1, 1]
-        sns.heatmap(ttk_improvement_hp, annot=True, fmt='.0f', cmap='RdYlGn', ax=ax5,
-                    vmin=imp_min, vmax=imp_max,
+        sns.heatmap(ttk_improvement_hp, annot=True, fmt='.0f', cmap='RdYlGn', center=0, ax=ax5,
+                    vmin=global_imp_min, vmax=global_imp_max,
                     cbar_kws={'label': 'TTK Improvement (ms)'})
         ax5.set_title(f'Hollow Point vs Base - TTK Improvement [80 HP]', fontsize=14, fontweight='bold')
         ax5.set_xlabel('Range (m)', fontsize=12)
@@ -240,8 +280,8 @@ for idx, weapon_row in df.iterrows():
         
         # 6. Synthetic improvement
         ax6 = axes[1, 2]
-        sns.heatmap(ttk_improvement_synth, annot=True, fmt='.0f', cmap='RdYlGn', ax=ax6,
-                    vmin=imp_min, vmax=imp_max,
+        sns.heatmap(ttk_improvement_synth, annot=True, fmt='.0f', cmap='RdYlGn', center=0, ax=ax6,
+                    vmin=global_imp_min, vmax=global_imp_max,
                     cbar_kws={'label': 'TTK Improvement (ms)'})
         ax6.set_title(f'Synthetic vs Base - TTK Improvement [80 HP]', fontsize=14, fontweight='bold')
         ax6.set_xlabel('Range (m)', fontsize=12)
@@ -290,7 +330,8 @@ for idx, weapon_row in df.iterrows():
         
         # 4. HP improvement
         ax4 = axes[1, 1]
-        sns.heatmap(ttk_improvement_hp, annot=True, fmt='.0f', cmap='RdYlGn', ax=ax4,
+        sns.heatmap(ttk_improvement_hp, annot=True, fmt='.0f', cmap='RdYlGn', center=0, ax=ax4,
+                    vmin=global_imp_min, vmax=global_imp_max,
                     cbar_kws={'label': 'TTK Improvement (ms)'})
         ax4.set_title(f'Hollow Point vs Base - TTK Improvement [80 HP]', fontsize=14, fontweight='bold')
         ax4.set_xlabel('Range (m)', fontsize=12)
