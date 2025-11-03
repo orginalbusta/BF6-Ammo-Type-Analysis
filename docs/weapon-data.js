@@ -2,6 +2,7 @@ const weaponData = {
     // Assault Rifles
     'AK4D': {
         ttkImage: 'visualizations/TTK_ANALYSIS/Assault Rifle/AK4D.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/Assault Rifle/AK4D.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/AK4D_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/AK4D_2HS.png',
         recommendations: [
@@ -11,6 +12,7 @@ const weaponData = {
     },
     'B36A4': {
         ttkImage: 'visualizations/TTK_ANALYSIS/Assault Rifle/B36A4.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/Assault Rifle/B36A4.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/B36A4_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/B36A4_2HS.png',
         recommendations: [
@@ -20,6 +22,7 @@ const weaponData = {
     },
     'M433': {
         ttkImage: 'visualizations/TTK_ANALYSIS/Assault Rifle/M433.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/Assault Rifle/M433.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/M433_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/M433_2HS.png',
         recommendations: [
@@ -29,6 +32,7 @@ const weaponData = {
     },
     'SOR-556 MK2': {
         ttkImage: 'visualizations/TTK_ANALYSIS/Assault Rifle/SOR-556 MK2.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/Assault Rifle/SOR-556 MK2.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/SOR-556 MK2_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/SOR-556 MK2_2HS.png',
         recommendations: [
@@ -40,6 +44,7 @@ const weaponData = {
     // Carbines
     'GRT-BC': {
         ttkImage: 'visualizations/TTK_ANALYSIS/Carbine/GRT-BC.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/Carbine/GRT-BC.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/GRT-BC_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/GRT-BC_2HS.png',
         recommendations: [
@@ -49,6 +54,7 @@ const weaponData = {
     },
     'M277': {
         ttkImage: 'visualizations/TTK_ANALYSIS/Carbine/M277.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/Carbine/M277.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/M277_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/M277_2HS.png',
         recommendations: [
@@ -58,6 +64,7 @@ const weaponData = {
     },
     'M4A1': {
         ttkImage: 'visualizations/TTK_ANALYSIS/Carbine/M4A1.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/Carbine/M4A1.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/M4A1_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/M4A1_2HS.png',
         recommendations: [
@@ -69,6 +76,7 @@ const weaponData = {
     // Light Machine Guns
     'DRS-IAR': {
         ttkImage: 'visualizations/TTK_ANALYSIS/LMG/DRS-IAR.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/LMG/DRS-IAR.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/DRS-IAR_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/DRS-IAR_2HS.png',
         recommendations: [
@@ -78,6 +86,7 @@ const weaponData = {
     },
     'L110': {
         ttkImage: 'visualizations/TTK_ANALYSIS/LMG/L110.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/LMG/L110.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/L110_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/L110_2HS.png',
         recommendations: [
@@ -87,6 +96,7 @@ const weaponData = {
     },
     'M123K': {
         ttkImage: 'visualizations/TTK_ANALYSIS/LMG/M123K.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/LMG/M123K.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/M123K_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/M123K_2HS.png',
         recommendations: [
@@ -96,6 +106,7 @@ const weaponData = {
     },
     'RPKM': {
         ttkImage: 'visualizations/TTK_ANALYSIS/LMG/RPKM.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/LMG/RPKM.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/RPKM_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/RPKM_2HS.png',
         recommendations: [
@@ -107,6 +118,7 @@ const weaponData = {
     // Submachine Guns
     'KV9': {
         ttkImage: 'visualizations/TTK_ANALYSIS/SMG/KV9.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/SMG/KV9.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/KV9_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/KV9_2HS.png',
         recommendations: [
@@ -116,6 +128,7 @@ const weaponData = {
     },
     'PW5A3': {
         ttkImage: 'visualizations/TTK_ANALYSIS/SMG/PW5A3.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/SMG/PW5A3.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/PW5A3_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/PW5A3_2HS.png',
         recommendations: [
@@ -125,6 +138,7 @@ const weaponData = {
     },
     'SGX': {
         ttkImage: 'visualizations/TTK_ANALYSIS/SMG/SGX.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/SMG/SGX.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/SGX_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/SGX_2HS.png',
         recommendations: [
@@ -134,6 +148,7 @@ const weaponData = {
     },
     'UMG-40': {
         ttkImage: 'visualizations/TTK_ANALYSIS/SMG/UMG-40.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/SMG/UMG-40.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/UMG-40_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/UMG-40_2HS.png',
         recommendations: [
@@ -143,6 +158,7 @@ const weaponData = {
     },
     'USG-90': {
         ttkImage: 'visualizations/TTK_ANALYSIS/SMG/USG-90.png',
+        ttkImage80HP: 'visualizations/TTK_ANALYSIS_80HP/SMG/USG-90.png',
         rangeImage1HS: 'visualizations/INDIVIDUAL_WEAPONS/USG-90_1HS.png',
         rangeImage2HS: 'visualizations/INDIVIDUAL_WEAPONS/USG-90_2HS.png',
         rangeImage3HS: 'visualizations/INDIVIDUAL_WEAPONS/USG-90_3HS.png',

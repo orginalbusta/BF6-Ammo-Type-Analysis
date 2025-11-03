@@ -212,6 +212,35 @@
             color: white;
         }
 
+        .hp-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .hp-btn {
+            background: #3a3f4f;
+            color: #e0e0e0;
+            border: 2px solid #6a7280;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .hp-btn:hover {
+            background: #4a5568;
+            border-color: #f59e42;
+        }
+
+        .hp-btn.active {
+            background: #f59e42;
+            color: #1a1f2e;
+            border-color: #f59e42;
+        }
+
         .range-tabs {
             display: flex;
             gap: 10px;
@@ -370,6 +399,10 @@
                 <!-- TTK Analysis -->
                 <div class="visualization-section">
                     <h3 class="section-title">TTK (Time-To-Kill) Analysis</h3>
+                    <div class="hp-toggle">
+                        <button class="hp-btn active" onclick="switchHP('100', this)">100 HP</button>
+                        <button class="hp-btn" onclick="switchHP('80', this)">80 HP (Touched)</button>
+                    </div>
                     <img id="ttkImage" class="viz-image" src="" alt="TTK Analysis">
                 </div>
 
@@ -412,8 +445,12 @@
             // Get weapon data
             currentWeaponData = weaponData[weaponName];
             
-            // Set TTK image
+            // Set TTK image (default to 100 HP)
             document.getElementById('ttkImage').src = currentWeaponData.ttkImage;
+            
+            // Reset HP toggle to 100 HP
+            document.querySelectorAll('.hp-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.hp-btn').classList.add('active');
             
             // Set range images
             const img1hs = document.getElementById('rangeImage1HS');
@@ -468,6 +505,20 @@
 
             // Show selected range image
             document.getElementById(`rangeImage${hsCount}HS`).style.display = 'block';
+        }
+
+        function switchHP(hpValue, buttonElement) {
+            // Update HP buttons
+            document.querySelectorAll('.hp-btn').forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+
+            // Update TTK image
+            const ttkImg = document.getElementById('ttkImage');
+            if (hpValue === '100') {
+                ttkImg.src = currentWeaponData.ttkImage;
+            } else {
+                ttkImg.src = currentWeaponData.ttkImage80HP;
+            }
         }
 
         function showWeaponSelection() {
