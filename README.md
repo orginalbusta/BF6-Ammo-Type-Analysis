@@ -2,6 +2,12 @@
 
 A comprehensive analysis of weapon effective ranges in Battlefield 6, comparing base ammunition, Hollow Point (HP), and Synthetic ammo types across different headshot scenarios.
 
+## 🌐 Interactive Web Tool
+
+**[View the Interactive Weapon Browser](https://orginalbusta.github.io/BF6-Ammo-Type-Analysis/)**
+
+Browse all 16 weapons with detailed TTK analysis, range visualizations, and personalized ammo recommendations for each weapon!
+
 ## Overview
 
 This project analyzes how special ammunition (Hollow Point and Synthetic) extends weapon effective range by increasing headshot damage multipliers:
