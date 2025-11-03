@@ -79,18 +79,23 @@ def create_circle_plot(gun_name, weapon_class, dmg_close, dmg_10m, dmg_75m, ammo
     ax.set_ylim(-110, 110)
     ax.set_aspect('equal')
     
-    # Plot circles (order: Synth, HP, Base, then dot on top) - FIXED: use facecolor instead of color
-    if synth_range > 0:
-        circle_synth = patches.Circle((0, 0), synth_range, facecolor='purple', alpha=0.3, linewidth=2, 
-                                      edgecolor='purple', label=f'Synthetic: {synth_range:.1f}m (+{synth_increase:.0f}%)')
+    # Plot circles (order: Synth bottom, HP middle, Base top, then dot on top)
+    # Use zorder to control layering explicitly
+    if synth_range > 0 and synth_range > base_range:
+        circle_synth = patches.Circle((0, 0), synth_range, facecolor='#9b59b6', alpha=0.25, linewidth=3, 
+                                      edgecolor='#9b59b6', zorder=1, 
+                                      label=f'Synthetic: {synth_range:.1f}m (+{synth_increase:.0f}%)')
         ax.add_patch(circle_synth)
     
-    circle_hp = patches.Circle((0, 0), hp_range, facecolor='orange', alpha=0.3, linewidth=2, 
-                               edgecolor='orange', label=f'Hollow Point: {hp_range:.1f}m (+{hp_increase:.0f}%)')
-    ax.add_patch(circle_hp)
+    if hp_range > base_range:
+        circle_hp = patches.Circle((0, 0), hp_range, facecolor='#e67e22', alpha=0.25, linewidth=3, 
+                                   edgecolor='#e67e22', zorder=2,
+                                   label=f'Hollow Point: {hp_range:.1f}m (+{hp_increase:.0f}%)')
+        ax.add_patch(circle_hp)
     
-    circle_base = patches.Circle((0, 0), base_range, facecolor='gray', alpha=0.5, linewidth=2, 
-                                 edgecolor='black', label=f'Base: {base_range:.1f}m')
+    circle_base = patches.Circle((0, 0), base_range, facecolor='#95a5a6', alpha=0.4, linewidth=3, 
+                                 edgecolor='#34495e', zorder=3,
+                                 label=f'Base: {base_range:.1f}m')
     ax.add_patch(circle_base)
     
     # Player position (smaller dot on top)
