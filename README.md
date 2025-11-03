@@ -225,27 +225,7 @@ This graph shows the actual damage falloff for all weapon types from 0m to 75m, 
 - **Solid lines**: Actual measured data (0m, 10m, 75m)
 - **Dashed lines**: Extrapolated data (75m-100m)
 
----
-
-## Methodology
-
-### Data Sources
-- Weapon damage values at 0m, 10m, 75m from official game data
-- Headshot multipliers from stat card values
-- Ammo type availability verified across multiple data sources
-
-### Calculation Method
-1. **Damage at each range**: Direct measurement + linear extrapolation to 100m
-2. **Total damage calculation**: `(Headshot_Damage × Num_Headshots) + (Body_Damage × Num_Body_Shots)`
-3. **Range interpolation**: Find exact range where total damage = 100 HP using linear interpolation between measurement points
-4. **Ammo comparison**: Calculate for base (1.34x), HP (1.5x), and Synthetic (1.75x) multipliers
-
-### Assumptions
-- **100 HP target** (standard player health)
-- **No armor** or damage reduction
-- **Direct hits** (no limb modifiers)
-- **Linear damage falloff** between measurement points
-- **Consistent headshot placement** (not realistic but useful for comparison)
+**Note:** Multiple weapons share identical damage falloff curves, which is why you'll see fewer distinct lines than weapons shown in the legend. Weapons with the same base damage and falloff pattern overlay perfectly on the graph.
 
 ---
 
