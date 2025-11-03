@@ -8,6 +8,8 @@ A comprehensive analysis of weapon effective ranges in Battlefield 6, comparing 
 
 Browse all 16 weapons with detailed TTK analysis, range visualizations, and personalized ammo recommendations for each weapon!
 
+> **📊 Data Coverage Note:** This analysis currently covers approximately half of the weapons in Battlefield 6. More robust, consistent, and comprehensive data for additional weapons is expected to become available in the coming months as the community continues testing and data collection efforts.
+
 ## Overview
 
 This project analyzes how special ammunition (Hollow Point and Synthetic) extends weapon effective range by increasing headshot damage multipliers:

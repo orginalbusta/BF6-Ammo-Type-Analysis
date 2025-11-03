@@ -13,8 +13,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #eee;
+            background: linear-gradient(135deg, #2a2a3e 0%, #35394a 100%);
+            color: #e0e0e0;
             min-height: 100vh;
             padding: 20px;
         }
@@ -27,27 +27,27 @@
         header {
             text-align: center;
             padding: 40px 20px;
-            border-bottom: 2px solid #0f3460;
+            border-bottom: 2px solid #4a5568;
             margin-bottom: 40px;
         }
 
         h1 {
             font-size: 3em;
-            color: #e94560;
+            color: #f59e42;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .subtitle {
             font-size: 1.2em;
-            color: #aaa;
+            color: #b0b0b0;
         }
 
         .back-btn {
             position: fixed;
             top: 20px;
             left: 20px;
-            background: #e94560;
+            background: #f59e42;
             color: white;
             border: none;
             padding: 12px 24px;
@@ -61,9 +61,9 @@
         }
 
         .back-btn:hover {
-            background: #d63651;
+            background: #e38a2f;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(233, 69, 96, 0.3);
+            box-shadow: 0 4px 8px rgba(245, 158, 66, 0.3);
         }
 
         .weapon-selection {
@@ -80,10 +80,10 @@
 
         .class-header {
             font-size: 2em;
-            color: #e94560;
+            color: #f59e42;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #0f3460;
+            border-bottom: 2px solid #4a5568;
         }
 
         .weapon-grid {
@@ -94,9 +94,9 @@
         }
 
         .weapon-btn {
-            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            color: #eee;
-            border: 2px solid #e94560;
+            background: linear-gradient(135deg, #3a3f4f 0%, #444b5e 100%);
+            color: #e0e0e0;
+            border: 2px solid #6a7280;
             padding: 20px;
             border-radius: 12px;
             cursor: pointer;
@@ -104,12 +104,25 @@
             font-weight: bold;
             transition: all 0.3s;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
         .weapon-btn:hover {
-            background: linear-gradient(135deg, #e94560 0%, #d63651 100%);
+            background: linear-gradient(135deg, #4a5568 0%, #5a6070 100%);
+            border-color: #f59e42;
             transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(233, 69, 96, 0.4);
+            box-shadow: 0 8px 16px rgba(106, 114, 128, 0.4);
+        }
+
+        .weapon-btn img {
+            width: 100%;
+            height: auto;
+            max-height: 100px;
+            object-fit: contain;
+            border-radius: 8px;
         }
 
         .weapon-content {
@@ -118,13 +131,13 @@
 
         .weapon-title {
             font-size: 2.5em;
-            color: #e94560;
+            color: #f59e42;
             margin-bottom: 10px;
         }
 
         .weapon-class {
             font-size: 1.2em;
-            color: #888;
+            color: #a0a0a0;
             margin-bottom: 30px;
         }
 
@@ -134,10 +147,10 @@
 
         .section-title {
             font-size: 1.8em;
-            color: #e94560;
+            color: #f59e42;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #0f3460;
+            border-bottom: 2px solid #4a5568;
         }
 
         .viz-image {
@@ -150,8 +163,8 @@
         }
 
         .recommendations {
-            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            border: 2px solid #e94560;
+            background: linear-gradient(135deg, #3a3f4f 0%, #444b5e 100%);
+            border: 2px solid #6a7280;
             border-radius: 12px;
             padding: 30px;
             margin-top: 30px;
@@ -159,20 +172,20 @@
 
         .rec-title {
             font-size: 1.8em;
-            color: #e94560;
+            color: #f59e42;
             margin-bottom: 20px;
         }
 
         .rec-item {
             margin-bottom: 15px;
             padding: 15px;
-            background: rgba(233, 69, 96, 0.1);
-            border-left: 4px solid #e94560;
+            background: rgba(245, 158, 66, 0.1);
+            border-left: 4px solid #f59e42;
             border-radius: 4px;
         }
 
         .rec-item strong {
-            color: #e94560;
+            color: #f59e42;
         }
 
         .ammo-badge {
@@ -230,10 +243,22 @@
             <div class="class-section">
                 <h2 class="class-header">Assault Rifles</h2>
                 <div class="weapon-grid">
-                    <button class="weapon-btn" onclick="showWeapon('AK4D', 'Assault Rifle')">AK4D</button>
-                    <button class="weapon-btn" onclick="showWeapon('B36A4', 'Assault Rifle')">B36A4</button>
-                    <button class="weapon-btn" onclick="showWeapon('M433', 'Assault Rifle')">M433</button>
-                    <button class="weapon-btn" onclick="showWeapon('SOR-556 MK2', 'Assault Rifle')">SOR-556 MK2</button>
+                    <button class="weapon-btn" onclick="showWeapon('AK4D', 'Assault Rifle')">
+                        <img src="pics/ak4d.png" alt="AK4D">
+                        <span>AK4D</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('B36A4', 'Assault Rifle')">
+                        <img src="pics/b36a4.png" alt="B36A4">
+                        <span>B36A4</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('M433', 'Assault Rifle')">
+                        <img src="pics/m433.png" alt="M433">
+                        <span>M433</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('SOR-556 MK2', 'Assault Rifle')">
+                        <img src="pics/sor-556 mk2.png" alt="SOR-556 MK2">
+                        <span>SOR-556 MK2</span>
+                    </button>
                 </div>
             </div>
 
@@ -241,9 +266,18 @@
             <div class="class-section">
                 <h2 class="class-header">Carbines</h2>
                 <div class="weapon-grid">
-                    <button class="weapon-btn" onclick="showWeapon('GRT-BC', 'Carbine')">GRT-BC</button>
-                    <button class="weapon-btn" onclick="showWeapon('M277', 'Carbine')">M277</button>
-                    <button class="weapon-btn" onclick="showWeapon('M4A1', 'Carbine')">M4A1</button>
+                    <button class="weapon-btn" onclick="showWeapon('GRT-BC', 'Carbine')">
+                        <img src="pics/grt-bc.png" alt="GRT-BC">
+                        <span>GRT-BC</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('M277', 'Carbine')">
+                        <img src="pics/m277.png" alt="M277">
+                        <span>M277</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('M4A1', 'Carbine')">
+                        <img src="pics/m4a1.png" alt="M4A1">
+                        <span>M4A1</span>
+                    </button>
                 </div>
             </div>
 
@@ -251,10 +285,22 @@
             <div class="class-section">
                 <h2 class="class-header">Light Machine Guns</h2>
                 <div class="weapon-grid">
-                    <button class="weapon-btn" onclick="showWeapon('DRS-IAR', 'LMG')">DRS-IAR</button>
-                    <button class="weapon-btn" onclick="showWeapon('L110', 'LMG')">L110</button>
-                    <button class="weapon-btn" onclick="showWeapon('M123K', 'LMG')">M123K</button>
-                    <button class="weapon-btn" onclick="showWeapon('RPKM', 'LMG')">RPKM</button>
+                    <button class="weapon-btn" onclick="showWeapon('DRS-IAR', 'LMG')">
+                        <img src="pics/drs-iar.png" alt="DRS-IAR">
+                        <span>DRS-IAR</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('L110', 'LMG')">
+                        <img src="pics/l110.png" alt="L110">
+                        <span>L110</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('M123K', 'LMG')">
+                        <img src="pics/m123k.png" alt="M123K">
+                        <span>M123K</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('RPKM', 'LMG')">
+                        <img src="pics/rpkm.png" alt="RPKM">
+                        <span>RPKM</span>
+                    </button>
                 </div>
             </div>
 
@@ -262,11 +308,26 @@
             <div class="class-section">
                 <h2 class="class-header">Submachine Guns</h2>
                 <div class="weapon-grid">
-                    <button class="weapon-btn" onclick="showWeapon('KV9', 'SMG')">KV9</button>
-                    <button class="weapon-btn" onclick="showWeapon('PW5A3', 'SMG')">PW5A3</button>
-                    <button class="weapon-btn" onclick="showWeapon('SGX', 'SMG')">SGX</button>
-                    <button class="weapon-btn" onclick="showWeapon('UMG-40', 'SMG')">UMG-40</button>
-                    <button class="weapon-btn" onclick="showWeapon('USG-90', 'SMG')">USG-90</button>
+                    <button class="weapon-btn" onclick="showWeapon('KV9', 'SMG')">
+                        <img src="pics/kv9.png" alt="KV9">
+                        <span>KV9</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('PW5A3', 'SMG')">
+                        <img src="pics/PW5A3.png" alt="PW5A3">
+                        <span>PW5A3</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('SGX', 'SMG')">
+                        <img src="pics/SGX.png" alt="SGX">
+                        <span>SGX</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('UMG-40', 'SMG')">
+                        <img src="pics/UMG-40.png" alt="UMG-40">
+                        <span>UMG-40</span>
+                    </button>
+                    <button class="weapon-btn" onclick="showWeapon('USG-90', 'SMG')">
+                        <img src="pics/usg-90.png" alt="USG-90">
+                        <span>USG-90</span>
+                    </button>
                 </div>
             </div>
         </div>
