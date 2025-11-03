@@ -377,9 +377,9 @@
                 <div class="visualization-section">
                     <h3 class="section-title">Effective Range Analysis</h3>
                     <div class="range-tabs">
-                        <button class="tab-btn active" onclick="switchRangeTab(1)">1 Headshot</button>
-                        <button class="tab-btn" onclick="switchRangeTab(2)">2 Headshots</button>
-                        <button class="tab-btn" id="tab3hs" onclick="switchRangeTab(3)" style="display: none;">3 Headshots</button>
+                        <button class="tab-btn active" id="tab1hs" onclick="switchRangeTab(1, this)">1 Headshot</button>
+                        <button class="tab-btn" id="tab2hs" onclick="switchRangeTab(2, this)">2 Headshots</button>
+                        <button class="tab-btn" id="tab3hs" onclick="switchRangeTab(3, this)" style="display: none;">3 Headshots</button>
                     </div>
                     <img id="rangeImage1HS" class="viz-image range-image" src="" alt="Range Analysis 1HS">
                     <img id="rangeImage2HS" class="viz-image range-image" src="" alt="Range Analysis 2HS" style="display: none;">
@@ -416,21 +416,32 @@
             document.getElementById('ttkImage').src = currentWeaponData.ttkImage;
             
             // Set range images
-            document.getElementById('rangeImage1HS').src = currentWeaponData.rangeImage1HS;
-            document.getElementById('rangeImage2HS').src = currentWeaponData.rangeImage2HS;
+            const img1hs = document.getElementById('rangeImage1HS');
+            const img2hs = document.getElementById('rangeImage2HS');
+            
+            img1hs.src = currentWeaponData.rangeImage1HS;
+            img2hs.src = currentWeaponData.rangeImage2HS;
+            
+            console.log('Loading range images:');
+            console.log('1HS:', currentWeaponData.rangeImage1HS);
+            console.log('2HS:', currentWeaponData.rangeImage2HS);
             
             // Show/hide 3HS tab and image based on weapon data
             const tab3hs = document.getElementById('tab3hs');
             const img3hs = document.getElementById('rangeImage3HS');
             if (currentWeaponData.rangeImage3HS) {
-                tab3hs.style.display = 'block';
+                tab3hs.style.display = 'inline-block';
                 img3hs.src = currentWeaponData.rangeImage3HS;
             } else {
                 tab3hs.style.display = 'none';
             }
 
-            // Reset to 1HS tab
-            switchRangeTab(1);
+            // Reset tabs - make 1HS active, hide other images
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab1hs').classList.add('active');
+            document.getElementById('rangeImage1HS').style.display = 'block';
+            document.getElementById('rangeImage2HS').style.display = 'none';
+            document.getElementById('rangeImage3HS').style.display = 'none';
 
             // Set recommendations
             const recDiv = document.getElementById('recommendations');
@@ -442,10 +453,15 @@
             window.scrollTo(0, 0);
         }
 
-        function switchRangeTab(hsCount) {
+        function switchRangeTab(hsCount, buttonElement) {
             // Update tab buttons
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            } else {
+                // If no button element provided, activate the appropriate tab button
+                document.getElementById(`tab${hsCount}hs`).classList.add('active');
+            }
 
             // Hide all range images
             document.querySelectorAll('.range-image').forEach(img => img.style.display = 'none');
