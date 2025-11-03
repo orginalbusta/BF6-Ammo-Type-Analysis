@@ -37,11 +37,36 @@ Each weapon has a detailed TTK heatmap showing:
 - **X-axis**: Range in meters
 - **Color scale**: Shared across all plots for direct comparison
 
-All TTK analyses are organized by weapon class:
-- [Assault Rifles](visualizations/TTK_ANALYSIS/Assault%20Rifle/)
-- [Carbines](visualizations/TTK_ANALYSIS/Carbine/)
-- [Light Machine Guns](visualizations/TTK_ANALYSIS/LMG/)
-- [Submachine Guns](visualizations/TTK_ANALYSIS/SMG/)
+### Example: DRS-IAR (LMG with Synthetic Access)
+![DRS-IAR TTK Analysis](visualizations/TTK_ANALYSIS/LMG/DRS-IAR.png)
+
+**Key Insights:**
+- 2 headshots at close range: HP/Synth both save 78ms (4-shot → 3-shot kill)
+- 3 headshots at 50-75m: Synthetic saves 78ms consistently
+- Maximum TTK improvement: 78ms across multiple scenarios
+
+### Example: M4A1 (Carbine with HP Only)
+![M4A1 TTK Analysis](visualizations/TTK_ANALYSIS/Carbine/M4A1.png)
+
+**Key Insights:**
+- 2 headshots at 0-20m: HP saves 67ms (5-shot → 4-shot kill)
+- 1 headshot at 50m+: HP starts providing consistent 67ms improvement
+- Demonstrates value even without Synthetic access
+
+### Example: UMG-40 (SMG with Synthetic - Tierlist #2)
+![UMG-40 TTK Analysis](visualizations/TTK_ANALYSIS/SMG/UMG-40.png)
+
+**Key Insights:**
+- Shows exceptional Synthetic scaling (max 189ms improvement!)
+- 2 headshots at 0-30m: Massive improvements from special ammo
+- Best SMG for special ammo utilization
+
+### Full TTK Analysis Library
+All TTK analyses organized by weapon class:
+- [Assault Rifles](visualizations/TTK_ANALYSIS/Assault%20Rifle/) - AK4D, B36A4, M433, SOR-556 MK2
+- [Carbines](visualizations/TTK_ANALYSIS/Carbine/) - GRT-BC, M277, M4A1
+- [Light Machine Guns](visualizations/TTK_ANALYSIS/LMG/) - DRS-IAR, L110, M123K, RPKM
+- [Submachine Guns](visualizations/TTK_ANALYSIS/SMG/) - KV9, PW5A3, SGX, UMG-40, USG-90
 
 ### Ammo Type Tierlists
 
